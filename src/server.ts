@@ -9,7 +9,7 @@ import { createServer } from "http";
 import connectDB from "./db/conn/db";
 import * as dotenv from "dotenv";
 import path from "path";
-import fs from "fs";
+import { typeDefs } from "./schema";
 import { Context } from "./types";
 import resolvers from "./resolvers";
 import User from "./db/entities/User";
@@ -31,10 +31,7 @@ interface AppolloContext extends Context {}
 const init = async (): Promise<void> => {
   await connectDB();
   const httpServer = createServer(app);
-  const typeDefs = fs.readFileSync(
-    path.join(__dirname, "schema/schema.graphql"),
-    "utf-8"
-  );
+
   const server = new ApolloServer({
     typeDefs,
     resolvers,

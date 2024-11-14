@@ -40,7 +40,10 @@ const resolvers = {
           throw new Error("Invalid email or password");
         }
 
-        let validPassword = await bcrypt.compare(password, user.password as string);
+        let validPassword = await bcrypt.compare(
+          password,
+          user.password as string
+        );
         if (!validPassword) {
           throw new Error("Invalid email or password");
         }
@@ -50,7 +53,6 @@ const resolvers = {
           process.env.JWT_SECRET as string,
           { expiresIn: "7d" }
         );
-        console.log("Token:", token);
         return { token, user };
       } catch (error) {
         console.error("Error logging in:", error);
@@ -87,7 +89,6 @@ const resolvers = {
         });
 
         const savedProduct = await product.save();
-        console.log("Saved Product:", savedProduct);
         return {
           ...savedProduct.toObject(),
           owner: user._id,
@@ -246,8 +247,6 @@ const resolvers = {
           page,
           limit,
         });
-        console.log("Aggregate Paginate:", aggregatePaginate);
-        // TODO: Fix pagination, also check with schema
         return {
           products: aggregatePaginate.docs,
           total: aggregatePaginate.totalDocs,

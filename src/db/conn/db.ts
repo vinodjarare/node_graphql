@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
 const connectDB = async ():Promise<void> => {
-  console.log(":: connecting to database ::", process.env.MONGO_URI);
   mongoose
     .connect(process.env.MONGO_URI as string, {
       serverSelectionTimeoutMS: 5000,

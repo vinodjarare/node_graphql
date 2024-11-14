@@ -1,3 +1,7 @@
+import { buildSchema } from "graphql";
+
+export const typeDefs = buildSchema(`
+
 scalar DateTime
 
 type User {
@@ -50,3 +54,4 @@ type Mutation {
   createUser(address: String!, email: String!, password: String!): User
   login(email: String!, password: String!): AuthPayload
 }
+`);
