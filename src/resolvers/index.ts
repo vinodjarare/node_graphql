@@ -85,7 +85,7 @@ const resolvers = {
           name,
           price,
           quantity,
-          owner: "6734df12433d65c2e580e595",
+          owner: user._id,
         });
 
         const savedProduct = await product.save();
