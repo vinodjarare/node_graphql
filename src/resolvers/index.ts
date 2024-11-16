@@ -90,8 +90,13 @@ const resolvers = {
 
         const savedProduct = await product.save();
         return {
-          ...savedProduct.toObject(),
-          owner: user._id,
+          ...savedProduct.toObject({
+            transform: (doc, ret) => {
+              ret.id = ret._id;
+              return ret;
+            },
+          }),
+          owner: user,
         };
       } catch (error) {
         console.error("Error adding product:", error);
@@ -239,6 +244,18 @@ const resolvers = {
             $unwind: "$owner",
           },
           {
+            $addFields: {
+              id: "$_id", // Map product _id to id
+              "owner.id": "$owner._id", // Map owner's _id to id
+            },
+          },
+          {
+            $project: {
+              _id: 0, // Optionally remove _id if you don't need it
+              "owner._id": 0, // Remove _id from owner to avoid confusion
+            },
+          },
+          {
             $sort: { createdAt: -1 },
           },
         ]);
@@ -247,6 +264,8 @@ const resolvers = {
           page,
           limit,
         });
+
+        console.log(aggregatePaginate.docs);
         return {
           products: aggregatePaginate.docs,
           total: aggregatePaginate.totalDocs,
